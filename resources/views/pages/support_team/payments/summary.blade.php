@@ -73,55 +73,35 @@
             {!! Qs::getPanelOptions() !!}
         </div>
 
-
-        {{-- Dashboard-Style Summary Cards --}}
-        <div class="row mb-4 g-3 p-4">
-
-            <!-- Total Paid This Month -->
-            <div class="col-xl-3 col-md-4 col-sm-6">
-                <div
-                    class="card border-0 shadow-sm rounded-3 py-3 px-4 d-flex flex-row align-items-center justify-content-between h-100">
-                    <div>
-                        <div class="text-uppercase small text-muted fw-semibold">Total Paid This Month</div>
-                        <div class="fs-5 fw-bold text-primary">LKR {{ number_format($current_month_paid, 2) }}</div>
-                    </div>
-                             <div class="icon-circle">
-
-                        <i class="bi bi-cash-stack fs-4"></i>
-                    </div>
+        <div class="container py-4">
+    <div class="row justify-content-center gy-3">
+        <!-- Total Paid This Month -->
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 py-3 px-4 d-flex flex-row align-items-center justify-content-between text-center h-100">
+                <div class="w-100">
+                    <div class="text-uppercase small text-muted fw-semibold">Total Paid This Month</div>
+                    <div class="fs-5 fw-bold text-primary mt-1" id="total-paid-card">LKR 0.00</div>
                 </div>
-            </div>
-
-            <!-- Total Fee Demand -->
-            <div class="col-xl-3 col-md-4 col-sm-6">
-                <div
-                    class="card border-0 shadow-sm rounded-3 py-3 px-4 d-flex flex-row align-items-center justify-content-between h-100">
-                    <div>
-                        <div class="text-uppercase small text-muted fw-semibold">Total Fee Demand</div>
-                        <div class="fs-5 fw-bold text-warning">LKR {{ number_format($total_fee, 2) }}</div>
-                    </div>
-                                <div class="icon-circle">
-
-                        <i class="bi bi-wallet2 fs-4"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pending Amount -->
-            <div class="col-xl-3 col-md-4 col-sm-6">
-                <div
-                    class="card border-0 shadow-sm rounded-3 py-3 px-4 d-flex flex-row align-items-center justify-content-between h-100">
-                    <div>
-                        <div class="text-uppercase small text-muted fw-semibold">Pending Amount</div>
-                        <div class="fs-5 fw-bold text-danger">LKR {{ number_format($pending_amount, 2) }}</div>
-                    </div>
-                                   <div class="icon-circle">
-
-                        <i class="bi bi-exclamation-circle fs-4"></i>
-                    </div>
+                <div class="icon-circle ms-3 d-none d-md-flex">
+                    <i class="bi bi-cash-stack fs-4"></i>
                 </div>
             </div>
         </div>
+
+        <!-- Pending Amount -->
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 py-3 px-4 d-flex flex-row align-items-center justify-content-between text-center h-100">
+                <div class="w-100">
+                    <div class="text-uppercase small text-muted fw-semibold">Pending Amount</div>
+                    <div class="fs-5 fw-bold text-danger mt-1" id="total-pending-card">LKR 0.00</div>
+                </div>
+                <div class="icon-circle ms-3 d-none d-md-flex">
+                    <i class="bi bi-exclamation-circle fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -157,12 +137,12 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Student Name</th>
-                                      <th>Class</th>
-        <th>Class Fee (Rs)</th>
+                                    <th>Class</th>
+                                    <th>Class Fee (Rs)</th>
 
-        <th>Paid To This Month (Rs)</th>
-        <th>Total (Rs)</th>
-        <th>Pending (Rs)</th>
+                                    <th>Paid To This Month (Rs)</th>
+                                    <th>Total (Rs)</th>
+                                    <th>Pending (Rs)</th>
 
                                 </tr>
                             </thead>
@@ -171,11 +151,11 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $student->name }}</td>
-                                           <td>{{ $student->class_name }}</td>
-            <td>{{ number_format($student->class_fee, 2) }}</td>
-            <td>{{ number_format($student->paid_this_month, 2) }}</td>
-            <td>{{ number_format($student->total_paid, 2) }}</td>
-            <td>{{ number_format($student->pending, 2) }}</td>
+                                        <td>{{ $student->class_name }}</td>
+                                        <td>{{ number_format($student->class_fee, 2) }}</td>
+                                        <td>{{ number_format($student->paid_this_month, 2) }}</td>
+                                        <td>{{ number_format($student->total_paid, 2) }}</td>
+                                        <td>{{ number_format($student->pending, 2) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -192,7 +172,12 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Student Name</th>
+                                        <th>Class</th>
+                                        <th>Class Fee (Rs)</th>
+
                                         <th>Paid To This Month (Rs)</th>
+                                        <th>Total (Rs)</th>
+                                        <th>Pending (Rs)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,7 +185,11 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $s->name }}</td>
-                                            <td>{{ number_format($s->paid_this_month, 2) }}</td>
+                                            <td>{{ $student->class_name }}</td>
+                                            <td>{{ number_format($student->class_fee, 2) }}</td>
+                                            <td>{{ number_format($student->paid_this_month, 2) }}</td>
+                                            <td>{{ number_format($student->total_paid, 2) }}</td>
+                                            <td>{{ number_format($student->pending, 2) }}</td>
 
                                         </tr>
                                     @endforeach
@@ -223,6 +212,31 @@
 
         <script>
             $(document).ready(function() {
+
+                function calculateTotalsForTab(tabPane) {
+                    let totalPaid = 0;
+                    let totalPending = 0;
+
+                    // Loop through all rows in the currently active tab
+                    $(tabPane).find('.datatable tbody tr').each(function() {
+                        let paid = parseFloat($(this).find('td:eq(4)').text().replace(/[^0-9.-]+/g, '')) || 0;
+                        let pending = parseFloat($(this).find('td:eq(6)').text().replace(/[^0-9.-]+/g, '')) ||
+                        0;
+
+                        totalPaid += paid;
+                        totalPending += pending;
+                    });
+
+                    // Update the dashboard cards
+                    $('#total-paid-card').text('LKR ' + totalPaid.toLocaleString('en-LK', {
+                        minimumFractionDigits: 2
+                    }));
+                    $('#total-pending-card').text('LKR ' + totalPending.toLocaleString('en-LK', {
+                        minimumFractionDigits: 2
+                    }));
+                }
+
+                // Initialize DataTables safely
                 $('.datatable').each(function() {
                     if (!$.fn.DataTable.isDataTable(this)) {
                         $(this).DataTable({
@@ -235,8 +249,24 @@
                         });
                     }
                 });
+
+                // Calculate totals for default active tab (All Students)
+                setTimeout(() => {
+                    calculateTotalsForTab($('.tab-pane.active'));
+                }, 600);
+
+                // Recalculate when user switches tab
+                $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+                    let targetPane = $($(e.target).attr('href'));
+                    setTimeout(() => {
+                        calculateTotalsForTab(targetPane);
+                    }, 300);
+                });
             });
         </script>
+
+
+
 
         {{-- // El --}}
 
