@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+use App\Models\StudentRecord;
+use App\User;
+use Illuminate\Support\Facades\DB;
+
 
 class StudentRecordController extends Controller
 {
@@ -66,7 +71,7 @@ class StudentRecordController extends Controller
         $adm_no = $req->adm_no;
         $adm_no = $req->adm_no ?: mt_rand(1000, 99999);
         $data['username'] = strtoupper(Qs::getAppCode() . '/' . ($ct ?? 'STD') . '/' . $sr['year_admitted'] . '/' . $adm_no);
-  
+
         if ($req->hasFile('photo')) {
             $photo = $req->file('photo');
             $f = Qs::getFileMetaData($photo);
@@ -92,6 +97,68 @@ class StudentRecordController extends Controller
             ->route('students.create')
             ->with('success', 'Student added successfully!');
     }
+
+
+//    Student History start
+    public function history($id)
+{
+    //  Decode or direct student ID
+    $student_id = $id;
+
+    if (!$student_id) {
+        return abort(404, 'Invalid or expired student link');
+    }
+
+    //  Get student basic info
+    $student = User::where('id', $student_id)->firstOrFail();
+
+    //  Get student record + class info
+    $record = StudentRecord::with('my_class')
+        ->where('user_id', $student_id)
+        ->first();
+
+    // Class name & duration
+    $className = $record->my_class->name ?? 'N/A';
+    $classDuration = $record->my_class->class_duration ?? 12;
+
+    //  Get all payments related to this student
+    $payments = DB::table('payment_records')
+        ->join('payments', 'payment_records.payment_id', '=', 'payments.id')
+        ->where('payment_records.student_id', $student_id)
+        ->select(
+            'payment_records.id',
+            'payments.title',
+            'payment_records.amt_paid',
+            'payment_records.balance',
+            'payment_records.paid_months',
+            'payment_records.year',
+            'payments.amount as total_amount',
+            'payment_records.created_at'
+        )
+        ->orderBy('payment_records.created_at', 'desc')
+        ->get();
+
+    //  Decode paid months for display
+    foreach ($payments as $pay) {
+        $decoded = json_decode($pay->paid_months, true);
+        if (is_string($decoded)) {
+            $decoded = json_decode($decoded, true);
+        }
+        $pay->paid_months = is_array($decoded) ? implode(', ', $decoded) : 'N/A';
+    }
+
+    //  Pass to view
+    return view('pages.support_team.students.history', compact(
+        'student',
+        'record',
+        'payments',
+        'className',
+        'classDuration'
+    ));
+}
+//  student history  End
+
+
 
     public function listByClass($class_id)
     {
@@ -243,4 +310,4 @@ class StudentRecordController extends Controller
     }
 }
 
-    /** End Student Info (All Students + Classes) */
+/** End Student Info (All Students + Classes) */

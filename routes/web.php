@@ -3,8 +3,10 @@
 use App\Http\Controllers\FineController;
 use App\Http\Controllers\SupportTeam\PaymentController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\SupportTeam\StudentRecordController;
 
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';
 
 //Route::get('/test', 'TestController@index')->name('test');
 Route::get('/privacy-policy', 'HomeController@privacy_policy')->name('privacy_policy');
@@ -20,6 +22,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/', 'MyAccountController@update_profile')->name('my_account.update');
         Route::put('/change_password', 'MyAccountController@change_pass')->name('my_account.change_pass');
     });
+
+
+     // student info
+        Route::get('studentinfo/{id}', [StudentRecordController::class, 'history'])
+            ->name('studentinfo.history');
 
     /*************** Support Team *****************/
     Route::group(['namespace' => 'SupportTeam'], function () {
@@ -45,7 +52,6 @@ Route::group(['middleware' => 'auth'], function () {
         /*************** Users *****************/
         Route::group(['prefix' => 'users'], function () {
             Route::get('reset_pass/{id}', 'UserController@reset_pass')->name('users.reset_pass');
-
         });
 
         /*************** TimeTables *****************/
@@ -144,6 +150,10 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::resource('students', 'StudentRecordController');
+
+       
+
+
         Route::resource('users', 'UserController');
         Route::resource('classes', 'MyClassController');
         Route::resource('sections', 'SectionController');
@@ -184,6 +194,3 @@ Route::delete('/fines/{fine}', [FineController::class, 'destroy'])->name('fines.
 //     ->name('payments.pay_additional');
 
 Route::post('/payments/{id}/pay-additional', [PaymentController::class, 'payAdditional'])->name('payments.pay_additional');
-
-
-
