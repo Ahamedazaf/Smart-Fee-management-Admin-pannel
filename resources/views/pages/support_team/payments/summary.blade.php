@@ -143,7 +143,7 @@
                                     <th>Class Fee (Rs)</th>
 
                                     <th>Paid To This Month (Rs)</th>
-                                    <th>Total (Rs)</th>
+                                    <th>Total Paid (Rs)</th>
                                     <th>Pending (Rs)</th>
                                     <th>Paid Month</th>
 
@@ -183,7 +183,7 @@
                                         <th>Class</th>
                                         <th>Class Fee (Rs)</th>
                                         <th>Paid To This Month (Rs)</th>
-                                        <th>Total (Rs)</th>
+                                        <th>Total Paid (Rs)</th>
                                         <th>Pending (Rs)</th>
                                          <th>Paid Month</th>
                                     </tr>
@@ -193,12 +193,12 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $s->name }}</td>
-                                            <td>{{ $s->class_name }}</td>
-                                            <td>{{ number_format($s->class_fee, 2) }}</td>
-                                            <td>{{ number_format($s->paid_this_month, 2) }}</td>
-                                            <td>{{ number_format($s->total_paid, 2) }}</td>
-                                            <td>{{ number_format($s->pending, 2) }}</td>
-                                            <td>{{ $s->paid_months_text }}</td>
+                                            <td>{{ $student->class_name }}</td>
+                                            <td>{{ number_format($student->class_fee, 2) }}</td>
+                                            <td>{{ number_format($student->paid_this_month, 2) }}</td>
+                                            <td>{{ number_format($student->total_paid, 2) }}</td>
+                                            <td>{{ number_format($student->pending, 2) }}</td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
