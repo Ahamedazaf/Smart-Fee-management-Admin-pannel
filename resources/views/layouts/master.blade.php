@@ -134,7 +134,7 @@
             <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
             <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
             <script src="{{ asset('assets/plugins/apexchart/chart-data.js') }}"></script>
-             {{-- <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+            {{-- <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('assets/plugins/datatables/datatables.min.js') }}"></script> --}}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -156,6 +156,182 @@
                 });
             </script>
 
+
+
+
+
+            <style>
+                /* =========================================================
+   🌈 DataTable Export Buttons - Modern Gradient Style
+   Author: Rootmaster
+   Version: Final v3.0
+   Compatible with: Bootstrap 5 + DataTables 1.13+
+   ========================================================= */
+
+                /* ----- Layout Wrapper ----- */
+                .dt-buttons {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin-bottom: 12px;
+                    align-items: center;
+
+                    justify-content: center !important;
+                    align-items: center !important;
+                }
+
+                /* ----- Base Button Style ----- */
+                .dt-button {
+                    border: none !important;
+                    border-radius: 8px !important;
+                    padding: 8px 16px !important;
+                    font-size: 0.92rem !important;
+                    font-weight: 600 !important;
+                    color: #fff !important;
+                    text-transform: capitalize;
+                    letter-spacing: 0.3px;
+                    transition: all 0.3s ease;
+                    display: inline-flex !important;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+                    cursor: pointer;
+                }
+
+                /* ----- Gradient Themes ----- */
+                .dt-button.buttons-copy {
+                    background: linear-gradient(45deg, #007bff, #00c6ff) !important;
+                }
+
+                .dt-button.buttons-excel {
+                    background: linear-gradient(45deg, #28a745, #66bb6a) !important;
+                }
+
+                .dt-button.buttons-csv {
+                    background: linear-gradient(45deg, #17a2b8, #00bcd4) !important;
+                }
+
+                .dt-button.buttons-pdf {
+                    background: linear-gradient(45deg, #dc3545, #ff4b5c) !important;
+                }
+
+                .dt-button.buttons-print {
+                    background: linear-gradient(45deg, #6c757d, #9ea7ad) !important;
+                }
+
+                /* ----- Hover Animation ----- */
+                .dt-button:hover {
+                    transform: translateY(-3px);
+                    filter: brightness(1.1);
+                    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+                    opacity: 0.95;
+                }
+
+                /* ----- Active State (Click Press) ----- */
+                .dt-button:active {
+                    transform: translateY(1px);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                }
+
+                /* ----- Focus Outline Disable ----- */
+                .dt-button:focus {
+                    outline: none !important;
+                    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+                }
+
+                /* ----- Dark Mode Friendly (auto-detect) ----- */
+                @media (prefers-color-scheme: dark) {
+                    .dt-button {
+                        box-shadow: 0 3px 8px rgba(255, 255, 255, 0.1);
+                    }
+
+                    .dt-button:hover {
+                        box-shadow: 0 6px 14px rgba(255, 255, 255, 0.15);
+                    }
+                }
+
+                /* ----- Mobile Responsive ----- */
+                @media (max-width: 576px) {
+                    .dt-buttons {
+                        flex-direction: column;
+                        align-items: stretch;
+                        gap: 8px;
+                    }
+
+                    .dt-button {
+                        width: 100%;
+                        justify-content: center;
+                        padding: 10px !important;
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+                /* =============== DataTable Filter =============== */
+
+                /* Wrap alignment */
+                .dataTables_filter {
+                    display: flex !important;
+                    flex-wrap: wrap !important;
+                    align-items: center !important;
+                    justify-content: flex-end !important;
+                    gap: 6px !important;
+                    margin-bottom: 10px !important;
+                    width: 100% !important;
+                }
+
+                /* Label text (Filter:) */
+                .dataTables_filter label {
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    width: 100% !important;
+                }
+
+                /* Search input styling */
+                .dataTables_filter input[type="search"] {
+                    flex: 1 1 300px !important;
+                    max-width: 300px !important;
+                    border-radius: 8px !important;
+                    border: 1px solid #ccc !important;
+                    padding: 8px 12px !important;
+                    font-size: 0.9rem !important;
+                    transition: all 0.2s ease-in-out;
+                }
+
+                /* Hover and focus animation */
+                .dataTables_filter input[type="search"]:focus {
+                    border-color: #007bff !important;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
+                }
+
+                /* ====== Mobile Responsive ====== */
+                @media (max-width: 768px) {
+                    .dataTables_filter {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        justify-content: center !important;
+                    }
+
+                    .dataTables_filter label {
+                        width: 100% !important;
+                        justify-content: center !important;
+                    }
+
+                    .dataTables_filter input[type="search"] {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                    }
+                }
+            </style>
         </div>
     </div>
 </body>
