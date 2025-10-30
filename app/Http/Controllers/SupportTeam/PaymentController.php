@@ -610,60 +610,6 @@ class PaymentController extends Controller
         return back()->with('flash_success', __('msg.update_ok'));
     }
 
-    // public function summary(Request $request)
-    // {
-    //     $studentsQuery = DB::table('users')
-    //         ->join('student_records', 'users.id', '=', 'student_records.user_id')
-    //         ->where('users.user_type', 'student');
-
-    //     // Filter by class if selected
-    //     if ($request->filled('class_id')) {
-    //         $studentsQuery->where('student_records.my_class_id', $request->class_id);
-    //     }
-
-    //     $students = $studentsQuery
-    //         ->select('users.*', 'student_records.my_class_id')
-    //         ->get();
-
-    //     $studentsWithPayments = $students->map(function ($student) {
-
-    //         // Calculate paid this month dynamically
-    //         $amountPaidThisMonth = DB::table('payment_records')
-    //             ->where('student_id', $student->id)
-    //             ->whereYear('created_at', now()->year)
-    //             ->whereMonth('created_at', now()->month)
-    //             ->sum('amt_paid');
-
-    //         // Get monthly fee from the student's class
-    //         $monthlyFee = optional(\App\Models\MyClass::find($student->my_class_id))->monthly_fee ?? 0;
-
-    //         $pending = max($monthlyFee - $amountPaidThisMonth, 0);
-
-    //         $student->fee_demand      = $monthlyFee;
-    //         $student->paid_this_month = $amountPaidThisMonth;
-    //         $student->pending         = $pending;
-
-    //         return $student;
-    //     });
-
-    //     $totalMonthlyFee    = $studentsWithPayments->sum('fee_demand');
-    //     $totalPaidThisMonth = $studentsWithPayments->sum('paid_this_month');
-    //     $totalPendingAmount = $studentsWithPayments->sum('pending');
-
-    //     // Total payments (class-wise or all)
-    //     $amount = $request->filled('class_id')
-    //         ? ModelsPayment::where('my_class_id', $request->class_id)->sum('amount')
-    //         : ModelsPayment::sum('amount');
-
-    //     return view('pages.support_team.payments.summary', [
-    //         'total_fee'          => $totalMonthlyFee,
-    //         'current_month_paid' => $totalPaidThisMonth,
-    //         'pending_amount'     => $totalPendingAmount,
-    //         'students'           => $studentsWithPayments,
-    //         'yearly_amount_sum'  => $amount,
-    //         'students_count'     => $studentsWithPayments->count(),
-    //     ]);
-    // }
 
     public function summary(Request $request)
     {
@@ -690,6 +636,46 @@ class PaymentController extends Controller
             $monthlyFee = DB::table('payments')
                 ->where('my_class_id', $classId)
                 ->sum('amount'); // if 'amount' holds class fee, you can use ->first() if it’s per record
+
+
+
+
+
+
+
+
+            //  paid month show code start
+            $paymentRecords = $this->pay->getAllMyPR($student->id)->get();
+
+            //  Collect all paid months and total amount
+            $paidMonths = collect();
+            $totalPaidForMonths = 0;
+
+            foreach ($paymentRecords as $record) {
+                $decoded = json_decode($record->paid_months, true);
+                if (is_string($decoded)) {
+                    $decoded = json_decode($decoded, true);
+                }
+
+                if (is_array($decoded)) {
+                    $paidMonths = $paidMonths->merge($decoded);
+                    $totalPaidForMonths += $record->amt_paid;
+                }
+            }
+
+            // Remove duplicate months
+            $uniqueMonths = $paidMonths->unique()->values()->toArray();
+
+            // Convert to readable text
+            $paidMonthsText = implode(', ', $uniqueMonths);
+
+            //  paid month show code end
+
+
+
+
+
+
 
 
             // Calculate paid this month dynamically
@@ -741,6 +727,7 @@ class PaymentController extends Controller
             $student->paid_this_month = $amountPaidThisMonth;
             $student->pending = $pending;
             $student->total_paid = $totalPaid;
+            $student->paid_months_text = $paidMonthsText;
 
 
             return $student;

@@ -145,6 +145,7 @@
                                     <th>Paid To This Month (Rs)</th>
                                     <th>Total (Rs)</th>
                                     <th>Pending (Rs)</th>
+                                    <th>Paid Month</th>
 
                                 </tr>
                             </thead>
@@ -158,6 +159,7 @@
                                         <td>{{ number_format($student->paid_this_month, 2) }}</td>
                                         <td>{{ number_format($student->total_paid, 2) }}</td>
                                         <td>{{ number_format($student->pending, 2) }}</td>
+                                        <td>{{ $student->paid_months_text }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -165,9 +167,13 @@
                     </div>
                 </div>
 
-                {{-- Class-wise Tabs --}}
                 @foreach (App\Models\MyClass::orderBy('name')->get() as $c)
                     <div class="tab-pane fade" id="c{{ $c->id }}">
+
+                        <h6 class=" text-primary fw-bold mb-4 border-bottom pb-2">
+                            {{ $c->name }}
+                        </h6>
+
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover table-striped datatable">
                                 <thead class="table-light">
@@ -176,10 +182,10 @@
                                         <th>Student Name</th>
                                         <th>Class</th>
                                         <th>Class Fee (Rs)</th>
-
                                         <th>Paid To This Month (Rs)</th>
                                         <th>Total (Rs)</th>
                                         <th>Pending (Rs)</th>
+                                         <th>Paid Month</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,12 +193,12 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $s->name }}</td>
-                                            <td>{{ $student->class_name }}</td>
-                                            <td>{{ number_format($student->class_fee, 2) }}</td>
-                                            <td>{{ number_format($student->paid_this_month, 2) }}</td>
-                                            <td>{{ number_format($student->total_paid, 2) }}</td>
-                                            <td>{{ number_format($student->pending, 2) }}</td>
-
+                                            <td>{{ $s->class_name }}</td>
+                                            <td>{{ number_format($s->class_fee, 2) }}</td>
+                                            <td>{{ number_format($s->paid_this_month, 2) }}</td>
+                                            <td>{{ number_format($s->total_paid, 2) }}</td>
+                                            <td>{{ number_format($s->pending, 2) }}</td>
+                                            <td>{{ $s->paid_months_text }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -200,6 +206,7 @@
                         </div>
                     </div>
                 @endforeach
+
 
             </div>
         </div>
@@ -281,77 +288,80 @@
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     @endpush
-<style>
-/* ====== GLOBAL DATATABLE EXPORT BUTTON STYLES ====== */
-div.dt-buttons {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 10px !important;
-    margin-bottom: 15px !important;
-    width: 100% !important;
-}
+    <style>
+        /* ====== GLOBAL DATATABLE EXPORT BUTTON STYLES ====== */
+        div.dt-buttons {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-bottom: 15px !important;
+            width: 100% !important;
+        }
 
-/* Common style for all export buttons */
-button.btn.btn-secondary.buttons-copy,
-button.btn.btn-secondary.buttons-excel,
-button.btn.btn-secondary.buttons-csv,
-button.btn.btn-secondary.buttons-pdf,
-button.btn.btn-secondary.buttons-print {
-    border: none !important;
-    color: #fff !important;
-    font-weight: 500 !important;
-    padding: 10px 16px !important;
-    border-radius: 8px !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-    font-size: 0.9rem !important;
-    flex: 1 1 180px !important; /* All buttons same width on PC */
-    max-width: 80px !important;
-    text-align: center !important;
-}
+        /* Common style for all export buttons */
+        button.btn.btn-secondary.buttons-copy,
+        button.btn.btn-secondary.buttons-excel,
+        button.btn.btn-secondary.buttons-csv,
+        button.btn.btn-secondary.buttons-pdf,
+        button.btn.btn-secondary.buttons-print {
+            border: none !important;
+            color: #fff !important;
+            font-weight: 500 !important;
+            padding: 10px 16px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+            font-size: 0.9rem !important;
+            flex: 1 1 180px !important;
+            /* All buttons same width on PC */
+            max-width: 80px !important;
+            text-align: center !important;
+        }
 
-/* ====== Color Themes ====== */
-button.btn.btn-secondary.buttons-copy {
-    background: linear-gradient(45deg, #007bff, #00c6ff) !important;
-}
-button.btn.btn-secondary.buttons-excel {
-    background: linear-gradient(45deg, #28a745, #66bb6a) !important;
-}
-button.btn.btn-secondary.buttons-csv {
-    background: linear-gradient(45deg, #17a2b8, #00bcd4) !important;
-}
-button.btn.btn-secondary.buttons-pdf {
-    background: linear-gradient(45deg, #dc3545, #ff4b5c) !important;
-}
-button.btn.btn-secondary.buttons-print {
-    background: linear-gradient(45deg, #6c757d, #9ea7ad) !important;
-}
+        /* ====== Color Themes ====== */
+        button.btn.btn-secondary.buttons-copy {
+            background: linear-gradient(45deg, #007bff, #00c6ff) !important;
+        }
 
-/* Hover effect */
-button.btn.btn-secondary:hover {
-    transform: translateY(-2px) !important;
-    opacity: 0.9 !important;
-}
+        button.btn.btn-secondary.buttons-excel {
+            background: linear-gradient(45deg, #28a745, #66bb6a) !important;
+        }
 
-/* ====== Mobile Responsive ====== */
-@media (max-width: 768px) {
-    div.dt-buttons {
-        flex-direction: column !important;
-        align-items: stretch !important;
-    }
+        button.btn.btn-secondary.buttons-csv {
+            background: linear-gradient(45deg, #17a2b8, #00bcd4) !important;
+        }
 
-    div.dt-buttons button.btn.btn-secondary {
-        width: 100% !important;
-        flex: none !important;
-        max-width: 100% !important;
-        text-align: center !important;
-        justify-content: center !important;
-    }
-}
+        button.btn.btn-secondary.buttons-pdf {
+            background: linear-gradient(45deg, #dc3545, #ff4b5c) !important;
+        }
 
+        button.btn.btn-secondary.buttons-print {
+            background: linear-gradient(45deg, #6c757d, #9ea7ad) !important;
+        }
 
-</style>
+        /* Hover effect */
+        button.btn.btn-secondary:hover {
+            transform: translateY(-2px) !important;
+            opacity: 0.9 !important;
+        }
+
+        /* ====== Mobile Responsive ====== */
+        @media (max-width: 768px) {
+            div.dt-buttons {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            div.dt-buttons button.btn.btn-secondary {
+                width: 100% !important;
+                flex: none !important;
+                max-width: 100% !important;
+                text-align: center !important;
+                justify-content: center !important;
+            }
+        }
+    </style>
 
 @endsection

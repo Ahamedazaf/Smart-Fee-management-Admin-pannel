@@ -715,6 +715,28 @@
 
 
 
+                         //  Xl PDF btn hide code start
+
+                        $(document).ready(function() {
+                            $('.datatable-button-html5-columns').each(function() {
+                                if ($.fn.DataTable.isDataTable(this)) {
+                                    $(this).DataTable().destroy();
+                                }
+                                $(this).DataTable({
+                                    dom: 'lrtip',
+                                    responsive: true,
+                                    pageLength: 10,
+                                    language: {
+                                        search: "",
+                                        searchPlaceholder: "Search records..."
+                                    }
+                                });
+                            });
+                        });
+
+                         //  Xl PDF btn hide code end
+
+
                         document.querySelectorAll('.months-select').forEach(sel => {
                             const hash = sel.getAttribute('data-hash');
                             sel.addEventListener('change', function() {
