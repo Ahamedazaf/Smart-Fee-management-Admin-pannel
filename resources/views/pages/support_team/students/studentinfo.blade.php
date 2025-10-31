@@ -107,6 +107,7 @@
                 @foreach ($my_classes as $mc)
                     <div class="tab-pane fade" id="c{{ $mc->id }}">
                         <div class="table-responsive">
+                            <h6 class="text-primary fw-bold mb-4 border-bottom pb-2">{{ $mc->name }} Students</h6>
                             <table class="table table-bordered table-hover table-striped datatable">
                                 <thead class="table-light">
                                     <tr>

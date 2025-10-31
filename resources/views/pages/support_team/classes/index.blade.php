@@ -125,6 +125,14 @@
     </div>
 </div>
 
+{{-- El PDF btn hide css  start--}}
+<style>
+div.dt-buttons {
+    display: none !important;
+}
+</style>
+{{-- El PDF btn hide css  end--}}
+
 {{-- SweetAlert + AJAX --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
