@@ -184,7 +184,7 @@ Route::group(['namespace' => 'MyParent', 'middleware' => 'my_parent'], function 
     Route::get('/my_children', 'MyController@children')->name('my_children');
 });
 
-/************************ Fines ****************************/
+/************************ FinesCulculate****************************/
 
 Route::get('/fines', [FineController::class, 'index'])->name('fines.index');
 Route::post('/fines', [FineController::class, 'store'])->name('fines.store');
